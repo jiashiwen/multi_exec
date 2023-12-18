@@ -27,9 +27,6 @@ fn main() {
             });
         }
     });
-    // pool.scope(|_| {
-    //     execute_shell_command(cmd);
-    // });
 }
 
 fn execute_shell_command(cmd_str: &str) {
@@ -43,7 +40,4 @@ fn execute_shell_command(cmd_str: &str) {
         };
     }
     println!("array:{:?}", exec_cmd.output());
-    // let cmd = Command::from("ls -lart");
-
-    // println!("{:?}", cmd.args)
 }
