@@ -11,8 +11,18 @@ fn main() {
             .required(true)
             .index(1)
             .help("exeucte command")])
+        .args(&[Arg::new("parallel")
+            .value_name("parallel")
+            .required(false)
+            .index(2)
+            .value_parser(clap::value_parser!(usize))
+            .help("parallel")])
         .get_matches();
 
+    let parallel = match matches.get_one::<usize>("parallel") {
+        Some(p) => *p,
+        None => 1,
+    };
     let cmd = matches.get_one::<String>("exec_cmd").unwrap();
     let pool = rayon::ThreadPoolBuilder::new()
         .num_threads(num_cpus::get())
@@ -20,7 +30,7 @@ fn main() {
         .unwrap();
 
     pool.scope(|s| {
-        for _ in 0..num_cpus::get() {
+        for _ in 0..parallel {
             s.spawn(move |_| {
                 let command = cmd.to_string();
                 execute_shell_command(&command)
